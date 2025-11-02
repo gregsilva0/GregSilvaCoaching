@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/
 import { toast } from './ui/use-toast';
 type AuthView = 'login' | 'signup' | 'forgot';
 export const Auth: React.FC = () => {
-  const [view, setView] = useState<AuthView>('login');
+  const [view, setView] = useState<AuthView>('signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [schoolName, setSchoolName] = useState('');
@@ -33,9 +33,14 @@ export const Auth: React.FC = () => {
           error
         } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}`
+          }
         });
         if (error) throw error;
+        
+        // Create school profile
         if (data.user) {
           await supabase.from('school_profiles').insert({
             id: data.user.id,
@@ -43,11 +48,22 @@ export const Auth: React.FC = () => {
             email: email
           });
         }
-        toast({
-          title: 'Success!',
-          description: 'Account created! Check your email.'
-        });
+        
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+          toast({
+            title: 'Check Your Email!',
+            description: 'We sent you a confirmation link. Click it to activate your account.',
+            duration: 8000
+          });
+        } else {
+          toast({
+            title: 'Success!',
+            description: 'Account created successfully!',
+          });
+        }
       }
+
     } catch (error: any) {
       toast({
         title: 'Error',
