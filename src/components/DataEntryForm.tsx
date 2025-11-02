@@ -216,7 +216,8 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({ onSubmit, initialData }) 
       </div>
 
       <div className="border-t pt-4">
-        <h3 className="text-lg font-bold text-purple-600 mb-3 border-b-2 border-purple-200 pb-1">STUDENTS</h3>
+        <h3 className="text-lg font-bold text-blue-600 mb-3 border-b-2 border-blue-200 pb-1">STUDENTS</h3>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Starting Active Students</label>
